@@ -3,6 +3,8 @@ package mz.co.edpay;
 import mz.co.edpay.exceptions.EDPayException;
 import mz.co.edpay.resources.PaymentsResource;
 import mz.co.edpay.resources.CheckoutResource;
+import mz.co.edpay.resources.InvoicesResource;
+import mz.co.edpay.resources.SubscriptionsResource;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -32,6 +34,8 @@ public class EDPayClient {
 
     private final PaymentsResource payments;
     private final CheckoutResource checkout;
+    private final InvoicesResource invoices;
+    private final SubscriptionsResource subscriptions;
 
     private EDPayClient(Builder builder) {
         this.publicKey = builder.publicKey;
@@ -43,6 +47,8 @@ public class EDPayClient {
 
         this.payments = new PaymentsResource(this);
         this.checkout = new CheckoutResource(this);
+        this.invoices = new InvoicesResource(this);
+        this.subscriptions = new SubscriptionsResource(this);
     }
 
     public PaymentsResource payments() {
@@ -51,6 +57,14 @@ public class EDPayClient {
 
     public CheckoutResource checkout() {
         return checkout;
+    }
+
+    public InvoicesResource invoices() {
+        return invoices;
+    }
+
+    public SubscriptionsResource subscriptions() {
+        return subscriptions;
     }
 
     public String sendRequest(String method, String endpoint, String jsonBody, String idempotencyKey) {
