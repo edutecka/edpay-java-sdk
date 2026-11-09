@@ -1,24 +1,23 @@
 # EDPay Java SDK
 
-Official Java client for server-to-server payment integrations. The SDK uses Java's built-in HTTP client and returns API response bodies as JSON strings.
+Java client for sending server-to-server requests to the EDPay API. Resource methods return JSON strings from the API.
 
 ## Requirements
 
 - Java 17 or later
-- Maven 3.8 or later to build and install from source
+- Maven 3.8 or later
 
-## Build and install from source
+## Install
 
-The repository contains the SDK source. No remote Maven artifact repository is configured here; build and install the artifact locally before adding it to another project:
+Install the SDK in your local Maven repository:
 
 ```bash
 git clone https://github.com/edutecka/edpay-java-sdk.git
 cd edpay-java-sdk
-mvn test
 mvn install
 ```
 
-The Maven coordinates and version are defined in this repository's `pom.xml`:
+Add the dependency to your application's `pom.xml`:
 
 ```xml
 <dependency>
@@ -28,7 +27,7 @@ The Maven coordinates and version are defined in this repository's `pom.xml`:
 </dependency>
 ```
 
-For Gradle, after running `mvn install`, add `mavenLocal()` to the repositories block and use:
+For Gradle, add `mavenLocal()` to the repositories block and use:
 
 ```groovy
 implementation 'mz.co.edpay:edpay-java-sdk:1.0.0'
@@ -36,7 +35,7 @@ implementation 'mz.co.edpay:edpay-java-sdk:1.0.0'
 
 ## Create a payment
 
-Set `EDPAY_PUBLIC_KEY` and `EDPAY_PRIVATE_KEY` in the process environment. Use sandbox credentials with the sandbox environment while testing; keep private keys out of source control.
+Set `EDPAY_PUBLIC_KEY` and `EDPAY_PRIVATE_KEY` in the process environment. Keep the private key on your server. Use test keys for sandbox requests and set the API host explicitly:
 
 ```java
 import mz.co.edpay.EDPayClient;
@@ -45,24 +44,25 @@ EDPayClient client = new EDPayClient.Builder()
     .publicKey(System.getenv("EDPAY_PUBLIC_KEY"))
     .privateKey(System.getenv("EDPAY_PRIVATE_KEY"))
     .environment(EDPayClient.Environment.SANDBOX)
+    .baseUrl("https://api-pay.edutecka.com")
     .build();
 
 String payload = """
-    {"amount":500.00,"currency":"MZN",
-     "methods":["method_from_payment_methods"],
-     "reference":"ORDER-10492","description":"Example order",
-     "return_url":"https://shop.example/orders/ORDER-10492"}
+    {"amount_minor":50000,"currency":"MZN",
+     "method":"method_from_payment_methods",
+     "phone":"+25884xxxxxxx",
+     "reference":"ORDER-10492","description":"Example order"}
     """;
 
 String responseJson = client.payments().create(payload, "ORDER-10492");
 System.out.println(responseJson);
 ```
 
-`payments().create(payload, idempotencyKey)` sends `POST /v1/payments`. Replace `method_from_payment_methods` with a method identifier returned by `GET /v1/public/payment-methods`, and use the request fields required by the API reference. The SDK forwards the JSON string without request-model validation and returns the response body as a string. It sends `X-EDPay-Public-Key`, `X-EDPay-Private-Key`, `Content-Type: application/json`, and, when supplied, `Idempotency-Key`. The example amount is MZN 500.00. For hosted checkout, extract the `payment_url` from the API response and redirect the customer to it. Do not treat the browser return as payment confirmation.
+`payments().create(payload, idempotencyKey)` sends `POST /v1/payments` and returns the API response as JSON text. Replace `method_from_payment_methods` with an ID returned by `GET /v1/public/payment-methods`. `amount_minor` uses minor currency units: `50000` means MZN 500.00. Include `phone` when required by the selected method. The SDK sends `X-EDPay-Public-Key`, `X-EDPay-Private-Key`, and the optional `Idempotency-Key`.
 
-To retrieve or cancel a payment, use `client.payments().retrieve(paymentId)` or `client.payments().cancel(paymentId)`. These call `GET /v1/payments/{paymentId}` and `POST /v1/payments/{paymentId}/cancel` respectively.
+Retrieve or cancel a payment with `client.payments().retrieve(paymentId)` and `client.payments().cancel(paymentId)`.
 
-The SDK also exposes `client.checkout().createSession(jsonPayload, idempotencyKey)`, `retrieveSession(sessionId)`, and `expireSession(sessionId)` for `/v1/checkout/sessions` routes. These routes are implemented in this SDK, but are not described in the published API reference; confirm their availability and request schema with EDPay before using them. The documented hosted payment flow is to create a payment through `POST /v1/payments` and use the returned `payment_url`.
+For hosted checkout, use `client.checkout().createSession(jsonPayload, idempotencyKey)`, then redirect the customer to the checkout URL returned by the API. Confirm the final payment using a server-side lookup or a verified webhook.
 
 ## Verify webhook signatures
 
@@ -78,6 +78,16 @@ if (!valid) {
 ```
 
 The verifier checks a hexadecimal HMAC-SHA256 signature. Do not parse and re-serialize the body before verification.
+
+## Available operations
+
+- Payments: `create`, `retrieve`, `cancel`
+- Checkout sessions: `createSession`, `retrieveSession`, `expireSession`
+- Invoices: `create`, `list`, `retrieve`, `finalize`, `voidInvoice`
+- Subscriptions: `create`, `list`, `retrieve`, `pause`, `resume`, `cancel`
+- Webhooks: `WebhookVerifier.verify`
+
+The SDK accepts request bodies as JSON strings and returns JSON strings. Parse the response to read the payment ID, status, and any checkout URL.
 
 ## Official documentation
 
