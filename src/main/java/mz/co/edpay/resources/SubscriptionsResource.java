@@ -13,24 +13,17 @@ public class SubscriptionsResource {
         return client.sendRequest("POST", "/v1/invoice-series", jsonPayload, idempotencyKey);
     }
 
-    public String list(String queryParams) {
-        String path = "/v1/invoice-series" + (queryParams != null && !queryParams.isBlank() ? "?" + queryParams : "");
-        return client.sendRequest("GET", path, null, null);
-    }
-
-    public String retrieve(String seriesId) {
-        return client.sendRequest("GET", "/v1/invoice-series/" + seriesId, null, null);
+    public String list() { return client.sendRequest("GET", "/v1/invoice-series", null, null); }
+    public String list(int limit) {
+        if (limit < 1 || limit > 100) throw new IllegalArgumentException("limit must be between 1 and 100");
+        return client.sendRequest("GET", "/v1/invoice-series?limit=" + limit, null, null);
     }
 
     public String pause(String seriesId) {
-        return client.sendRequest("POST", "/v1/invoice-series/" + seriesId + "/pause", "{}", null);
+        return client.sendRequest("POST", "/v1/invoice-series/" + EDPayClient.pathSegment(seriesId) + "/pause", "{}", null);
     }
 
     public String resume(String seriesId) {
-        return client.sendRequest("POST", "/v1/invoice-series/" + seriesId + "/resume", "{}", null);
-    }
-
-    public String cancel(String seriesId) {
-        return client.sendRequest("POST", "/v1/invoice-series/" + seriesId + "/cancel", "{}", null);
+        return client.sendRequest("POST", "/v1/invoice-series/" + EDPayClient.pathSegment(seriesId) + "/resume", "{}", null);
     }
 }

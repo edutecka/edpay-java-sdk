@@ -13,20 +13,21 @@ public class InvoicesResource {
         return client.sendRequest("POST", "/v1/invoices", jsonPayload, idempotencyKey);
     }
 
-    public String list(String queryParams) {
-        String path = "/v1/invoices" + (queryParams != null && !queryParams.isBlank() ? "?" + queryParams : "");
-        return client.sendRequest("GET", path, null, null);
+    public String list() { return client.sendRequest("GET", "/v1/invoices", null, null); }
+    public String list(int limit) {
+        if (limit < 1 || limit > 100) throw new IllegalArgumentException("limit must be between 1 and 100");
+        return client.sendRequest("GET", "/v1/invoices?limit=" + limit, null, null);
     }
 
     public String retrieve(String invoiceId) {
-        return client.sendRequest("GET", "/v1/invoices/" + invoiceId, null, null);
+        return client.sendRequest("GET", "/v1/invoices/" + EDPayClient.pathSegment(invoiceId), null, null);
     }
 
     public String finalize(String invoiceId) {
-        return client.sendRequest("POST", "/v1/invoices/" + invoiceId + "/finalize", "{}", null);
+        return client.sendRequest("POST", "/v1/invoices/" + EDPayClient.pathSegment(invoiceId) + "/finalize", "{}", null);
     }
 
     public String voidInvoice(String invoiceId) {
-        return client.sendRequest("POST", "/v1/invoices/" + invoiceId + "/void", "{}", null);
+        return client.sendRequest("POST", "/v1/invoices/" + EDPayClient.pathSegment(invoiceId) + "/void", "{}", null);
     }
 }

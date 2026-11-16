@@ -5,11 +5,11 @@
 
     <groupId>mz.co.edpay</groupId>
     <artifactId>edpay-java-sdk</artifactId>
-    <version>1.0.0</version>
+    <version>1.4.0</version>
     <packaging>jar</packaging>
 
     <name>EDPay Java SDK</name>
-    <description>SDK Oficial EDPay para Java (Spring Boot, Quarkus, Micronaut)</description>
+    <description>Official EDPay SDK for Java (Spring Boot, Quarkus, Micronaut)</description>
     <url>https://github.com/edutecka/edpay-java-sdk</url>
 
     <licenses>

@@ -13,11 +13,26 @@ public class PaymentsResource {
         return client.sendRequest("POST", "/v1/payments", jsonPayload, idempotencyKey);
     }
 
-    public String retrieve(String paymentId) {
-        return client.sendRequest("GET", "/v1/payments/" + paymentId, null, null);
+    public String createCheckout(String jsonPayload, String idempotencyKey) {
+        return client.sendRequest("POST", "/v1/payment-checkout", jsonPayload, idempotencyKey);
     }
 
-    public String cancel(String paymentId) {
-        return client.sendRequest("POST", "/v1/payments/" + paymentId + "/cancel", "{}", null);
+    public String list(int limit) {
+        if (limit < 1 || limit > 100) throw new IllegalArgumentException("limit must be between 1 and 100");
+        return client.sendRequest("GET", "/v1/payments?limit=" + limit, null, null);
+    }
+
+    public String list() { return list(50); }
+
+    public String retrieve(String paymentId) {
+        return client.sendRequest("GET", "/v1/payments/" + EDPayClient.pathSegment(paymentId), null, null);
+    }
+
+    public String events(String paymentId) {
+        return client.sendRequest("GET", "/v1/payments/" + EDPayClient.pathSegment(paymentId) + "/events", null, null);
+    }
+
+    public String attempts(String paymentId) {
+        return client.sendRequest("GET", "/v1/payments/" + EDPayClient.pathSegment(paymentId) + "/attempts", null, null);
     }
 }
