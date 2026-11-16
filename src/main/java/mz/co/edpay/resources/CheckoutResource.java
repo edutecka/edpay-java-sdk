@@ -33,11 +33,21 @@ public class CheckoutResource {
         return client.sendPublicRequest("GET", "/v1/checkout/sessions/" + EDPayClient.pathSegment(token) + "/payments/" + EDPayClient.pathSegment(paymentId), null);
     }
 
+    /** Switch method for the same session payment after its latest attempt definitively failed. */
+    public String createSessionPaymentAttempt(String token, String paymentId, String jsonPayload, String idempotencyKey) {
+        return client.sendPublicRequest("POST", "/v1/checkout/sessions/" + EDPayClient.pathSegment(token) + "/payments/" + EDPayClient.pathSegment(paymentId) + "/attempts", jsonPayload, idempotencyKey);
+    }
+
     public String createPaymentLinkPayment(String linkId, String jsonPayload, String idempotencyKey) {
         return client.sendPublicRequest("POST", "/v1/checkout/payment-links/" + EDPayClient.pathSegment(linkId) + "/payments", jsonPayload, idempotencyKey);
     }
 
     public String retrievePaymentLinkPayment(String linkId, String paymentId) {
         return client.sendPublicRequest("GET", "/v1/checkout/payment-links/" + EDPayClient.pathSegment(linkId) + "/payments/" + EDPayClient.pathSegment(paymentId), null);
+    }
+
+    /** Switch method for the same payment-link payment after its latest attempt definitively failed. */
+    public String createPaymentLinkPaymentAttempt(String linkId, String paymentId, String jsonPayload, String idempotencyKey) {
+        return client.sendPublicRequest("POST", "/v1/checkout/payment-links/" + EDPayClient.pathSegment(linkId) + "/payments/" + EDPayClient.pathSegment(paymentId) + "/attempts", jsonPayload, idempotencyKey);
     }
 }

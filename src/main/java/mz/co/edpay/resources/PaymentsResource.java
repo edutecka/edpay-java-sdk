@@ -17,6 +17,11 @@ public class PaymentsResource {
         return client.sendRequest("POST", "/v1/payment-checkout", jsonPayload, idempotencyKey);
     }
 
+    /** Start a child method attempt on the same payment after the latest attempt definitively failed. */
+    public String createAttempt(String paymentId, String jsonPayload, String idempotencyKey) {
+        return client.sendRequest("POST", "/v1/payments/" + EDPayClient.pathSegment(paymentId) + "/attempts", jsonPayload, idempotencyKey);
+    }
+
     public String list(int limit) {
         if (limit < 1 || limit > 100) throw new IllegalArgumentException("limit must be between 1 and 100");
         return client.sendRequest("GET", "/v1/payments?limit=" + limit, null, null);
