@@ -118,7 +118,7 @@ public class EDPayClient {
                 .timeout(Duration.ofSeconds(timeoutSeconds))
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
-                .header("User-Agent", "EDPay-Java-SDK/1.5.0");
+                .header("User-Agent", "EDPay-Java-SDK/1.5.1");
 
             if (authenticated) {
                 reqBuilder.header("X-EDPay-Public-Key", publicKey)
@@ -190,9 +190,20 @@ public class EDPayClient {
         }
 
         public EDPayClient build() {
-            if (publicKey == null || privateKey == null) {
-                throw new IllegalArgumentException("Both publicKey and privateKey must be provided.");
+            String normalizedPublicKey = publicKey == null ? "" : publicKey.trim();
+            String normalizedPrivateKey = privateKey == null ? "" : privateKey.trim();
+            String publicMode = normalizedPublicKey.matches("^pk_(test|live)_[0-9a-fA-F]{24}$")
+                ? (normalizedPublicKey.startsWith("pk_test_") ? "test" : "live") : null;
+            String privateMode = normalizedPrivateKey.matches("^sk_(test|live)_[0-9a-fA-F]{64}$")
+                ? (normalizedPrivateKey.startsWith("sk_test_") ? "test" : "live") : null;
+            if (publicMode == null || privateMode == null) {
+                throw new IllegalArgumentException("A valid pk_test_/pk_live_ publicKey (24 hex characters) and sk_test_/sk_live_ privateKey (64 hex characters) must be provided.");
             }
+            if (!publicMode.equals(privateMode)) {
+                throw new IllegalArgumentException("EDPay publicKey and privateKey must use the same environment (test or live).");
+            }
+            this.publicKey = normalizedPublicKey;
+            this.privateKey = normalizedPrivateKey;
             return new EDPayClient(this);
         }
     }
