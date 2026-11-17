@@ -23,14 +23,14 @@ Add the dependency to your application's `pom.xml`:
 <dependency>
   <groupId>mz.co.edpay</groupId>
   <artifactId>edpay-java-sdk</artifactId>
-  <version>1.5.1</version>
+  <version>1.6.0</version>
 </dependency>
 ```
 
 For Gradle, add `mavenLocal()` to the repositories block and use:
 
 ```groovy
-implementation 'mz.co.edpay:edpay-java-sdk:1.5.1'
+implementation 'mz.co.edpay:edpay-java-sdk:1.6.0'
 ```
 
 ## Create a payment
