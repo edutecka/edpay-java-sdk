@@ -2,11 +2,9 @@ package mz.co.edpay;
 
 import mz.co.edpay.exceptions.EDPayException;
 import mz.co.edpay.resources.PaymentsResource;
-import mz.co.edpay.resources.CheckoutResource;
 import mz.co.edpay.resources.InvoicesResource;
 import mz.co.edpay.resources.SubscriptionsResource;
 import mz.co.edpay.resources.CustomersResource;
-import mz.co.edpay.resources.PaymentLinksResource;
 import mz.co.edpay.resources.WalletsResource;
 import mz.co.edpay.resources.FxResource;
 import mz.co.edpay.resources.WebhooksResource;
@@ -41,11 +39,9 @@ public class EDPayClient {
     private final int timeoutSeconds;
 
     private final PaymentsResource payments;
-    private final CheckoutResource checkout;
     private final InvoicesResource invoices;
     private final SubscriptionsResource subscriptions;
     private final CustomersResource customers;
-    private final PaymentLinksResource paymentLinks;
     private final WalletsResource wallets;
     private final FxResource fx;
     private final WebhooksResource webhooks;
@@ -61,11 +57,9 @@ public class EDPayClient {
             .build();
 
         this.payments = new PaymentsResource(this);
-        this.checkout = new CheckoutResource(this);
         this.invoices = new InvoicesResource(this);
         this.subscriptions = new SubscriptionsResource(this);
         this.customers = new CustomersResource(this);
-        this.paymentLinks = new PaymentLinksResource(this);
         this.wallets = new WalletsResource(this);
         this.fx = new FxResource(this);
         this.webhooks = new WebhooksResource(this);
@@ -76,9 +70,7 @@ public class EDPayClient {
         return payments;
     }
 
-    public CheckoutResource checkout() {
-        return checkout;
-    }
+
 
     public InvoicesResource invoices() {
         return invoices;
@@ -89,7 +81,6 @@ public class EDPayClient {
     }
 
     public CustomersResource customers() { return customers; }
-    public PaymentLinksResource paymentLinks() { return paymentLinks; }
     public WalletsResource wallets() { return wallets; }
     public FxResource fx() { return fx; }
     public WebhooksResource webhooks() { return webhooks; }

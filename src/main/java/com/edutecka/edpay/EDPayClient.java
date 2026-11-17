@@ -26,8 +26,6 @@ public class EDPayClient {
     public String getBaseUrl() { return baseUrl; }
 
     public mz.co.edpay.resources.PaymentsResource payments() { return delegate.payments(); }
-    public mz.co.edpay.resources.CheckoutResource checkout() { return delegate.checkout(); }
-    public mz.co.edpay.resources.PaymentLinksResource paymentLinks() { return delegate.paymentLinks(); }
     public mz.co.edpay.resources.CustomersResource customers() { return delegate.customers(); }
     public mz.co.edpay.resources.InvoicesResource invoices() { return delegate.invoices(); }
     public mz.co.edpay.resources.SubscriptionsResource subscriptions() { return delegate.subscriptions(); }
