@@ -98,7 +98,7 @@ public class EDPayClient {
                 .timeout(Duration.ofSeconds(timeoutSeconds))
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
-                .header("User-Agent", "EDPay-Java-SDK/1.6.1");
+                .header("User-Agent", "EDPay-Java-SDK/1.6.2");
 
             if (authenticated) {
                 reqBuilder.header("X-EDPay-Public-Key", publicKey)
