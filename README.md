@@ -23,21 +23,21 @@ Add the dependency to your application's `pom.xml`:
 <dependency>
   <groupId>mz.co.edpay</groupId>
   <artifactId>edpay-java-sdk</artifactId>
-  <version>1.6.0</version>
+  <version>1.6.1</version>
 </dependency>
 ```
 
 For Gradle, add `mavenLocal()` to the repositories block and use:
 
 ```groovy
-implementation 'mz.co.edpay:edpay-java-sdk:1.6.0'
+implementation 'mz.co.edpay:edpay-java-sdk:1.6.1'
 ```
 
 ## Create a payment
 
 Every partner API request requires both the public key (`pk_test_` or `pk_live_`) and private key (`sk_test_` or `sk_live_`) from the same environment. The SDK rejects missing, blank, or mismatched key pairs when building the client. Public catalog requests and buyer-facing checkout requests authenticated by a checkout token do not use the partner key pair; keep the private key on your server.
 
-Set `EDPAY_PUBLIC_KEY` and `EDPAY_PRIVATE_KEY` in the process environment. Keep the private key on your server. Use test keys for sandbox requests and set the API host explicitly:
+Set `EDPAY_PUBLIC_KEY` and `EDPAY_PRIVATE_KEY` in the process environment. Keep the private key on your server. Use matching test keys for test requests or live keys for production. The key prefixes select the environment; both use the same API host:
 
 ```java
 import mz.co.edpay.EDPayClient;
@@ -47,8 +47,6 @@ import java.util.Objects;
 EDPayClient client = new EDPayClient.Builder()
     .publicKey(System.getenv("EDPAY_PUBLIC_KEY"))
     .privateKey(System.getenv("EDPAY_PRIVATE_KEY"))
-    .environment(EDPayClient.Environment.SANDBOX)
-    .baseUrl("https://api-pay.edutecka.com")
     .build();
 
 String payload = """

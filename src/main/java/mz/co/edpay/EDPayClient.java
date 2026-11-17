@@ -19,18 +19,7 @@ import java.util.Map;
 
 public class EDPayClient {
 
-    public enum Environment {
-        PRODUCTION("https://api-pay.edutecka.com"),
-        SANDBOX("https://api-pay.edutecka.com");
-
-        private final String baseUrl;
-        Environment(String baseUrl) {
-            this.baseUrl = baseUrl;
-        }
-        public String getBaseUrl() {
-            return baseUrl;
-        }
-    }
+    public static final String DEFAULT_BASE_URL = "https://api-pay.edutecka.com";
 
     private final String publicKey;
     private final String privateKey;
@@ -50,7 +39,7 @@ public class EDPayClient {
     private EDPayClient(Builder builder) {
         this.publicKey = builder.publicKey;
         this.privateKey = builder.privateKey;
-        this.baseUrl = builder.baseUrl != null ? builder.baseUrl : builder.environment.getBaseUrl();
+        this.baseUrl = builder.baseUrl != null ? builder.baseUrl : DEFAULT_BASE_URL;
         this.timeoutSeconds = builder.timeoutSeconds;
         this.httpClient = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(builder.timeoutSeconds))
@@ -109,7 +98,7 @@ public class EDPayClient {
                 .timeout(Duration.ofSeconds(timeoutSeconds))
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
-                .header("User-Agent", "EDPay-Java-SDK/1.6.0");
+                .header("User-Agent", "EDPay-Java-SDK/1.6.1");
 
             if (authenticated) {
                 reqBuilder.header("X-EDPay-Public-Key", publicKey)
@@ -151,7 +140,6 @@ public class EDPayClient {
     public static class Builder {
         private String publicKey;
         private String privateKey;
-        private Environment environment = Environment.PRODUCTION;
         private String baseUrl;
         private int timeoutSeconds = 60;
 
@@ -162,11 +150,6 @@ public class EDPayClient {
 
         public Builder privateKey(String privateKey) {
             this.privateKey = privateKey;
-            return this;
-        }
-
-        public Builder environment(Environment environment) {
-            this.environment = environment;
             return this;
         }
 

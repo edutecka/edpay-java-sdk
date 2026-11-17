@@ -13,7 +13,6 @@ public class EDPayClient {
         this.delegate = new mz.co.edpay.EDPayClient.Builder()
             .publicKey(publicKey)
             .privateKey(privateKey)
-            .environment(mz.co.edpay.EDPayClient.Environment.PRODUCTION)
             .baseUrl(this.baseUrl)
             .build();
     }
