@@ -21,4 +21,5 @@ jobs:
           distribution: temurin
           java-version: "17"
           cache: maven
+          mvn-mirrors: maven-central-mirror:https://maven-central.storage-download.googleapis.com/maven2:central
       - run: mvn --batch-mode --no-transfer-progress clean verify
