@@ -103,6 +103,10 @@ String resultJson = client.payments().publicCheckout(
 
 Use `listCheckouts(paymentId)` to read private executions, public/link executions, and sessions where no method was submitted. Use `retrieve(paymentId)` to read current payment status. For buyer routes, use the opaque token returned by `publicCheckout` or `linkCheckout`; keep partner keys on your server.
 
+### M-Pesa and e-Mola PIN confirmation
+
+For `mpesa` and `emola` calls to `privateCheckout`, set a 60-second confirmation window and ask the buyer to approve the phone prompt and enter the PIN. The API returns `202 Accepted` when the execution is queued; it does not wait for PIN entry or confirm payment. Keep the payment pending and wait for a verified webhook or poll `retrieve(paymentId)` / `listCheckouts(paymentId)` for the final status. If no confirmation arrives within 60 seconds, continue reconciliation; do not resubmit while the execution is pending or unknown.
+
 ## Function reference
 
 Each row tells you what the call does and when to use it. Partner calls use the API key pair; public catalog and buyer checkout calls do not. Supply a stable `Idempotency-Key` for writes where required.
