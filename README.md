@@ -9,15 +9,7 @@ Java client for sending server-to-server requests to the EDPay API. Resource met
 
 ## Install
 
-Install the SDK in your local Maven repository:
-
-```bash
-git clone https://github.com/edutecka/edpay-java-sdk.git
-cd edpay-java-sdk
-mvn install
-```
-
-Add the dependency to your application's `pom.xml`:
+Add the SDK dependency to your application's `pom.xml`:
 
 ```xml
 <dependency>
