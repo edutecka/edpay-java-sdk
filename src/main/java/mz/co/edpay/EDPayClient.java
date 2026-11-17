@@ -141,7 +141,7 @@ public class EDPayClient {
         private String publicKey;
         private String privateKey;
         private String baseUrl;
-        private int timeoutSeconds = 60;
+        private int timeoutSeconds = 90;
 
         public Builder publicKey(String publicKey) {
             this.publicKey = publicKey;
