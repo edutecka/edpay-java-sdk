@@ -19,7 +19,7 @@ Add the SDK dependency to your application's `pom.xml`:
 </dependency>
 ```
 
-For Gradle, add `mavenLocal()` to the repositories block and use:
+For Gradle, make sure `mavenCentral()` is in the repositories block and use:
 
 ```groovy
 implementation 'com.edutecka.edpay:edpay-java-sdk:1.6.3'
