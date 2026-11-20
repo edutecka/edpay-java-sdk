@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.3
+
+- Prepare the Maven Central release under `com.edutecka.edpay:edpay-java-sdk`.
+- No Java API changes; existing `mz.co.edpay` package names remain available.
+
 ## 1.6.2
 
 - Align SDK documentation with the API's private-checkout wait: the provider's 60-second PIN window starts after Master dispatch; the API deadline is 80 seconds from the request, and the SDK transport default is 90 seconds.

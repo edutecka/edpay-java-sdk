@@ -13,16 +13,16 @@ Add the SDK dependency to your application's `pom.xml`:
 
 ```xml
 <dependency>
-  <groupId>mz.co.edpay</groupId>
+  <groupId>com.edutecka.edpay</groupId>
   <artifactId>edpay-java-sdk</artifactId>
-  <version>1.6.2</version>
+  <version>1.6.3</version>
 </dependency>
 ```
 
 For Gradle, add `mavenLocal()` to the repositories block and use:
 
 ```groovy
-implementation 'mz.co.edpay:edpay-java-sdk:1.6.2'
+implementation 'com.edutecka.edpay:edpay-java-sdk:1.6.3'
 ```
 
 ## Create a payment
